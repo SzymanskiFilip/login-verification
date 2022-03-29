@@ -1,2 +1,4 @@
-package eu.filip.loginverification.service;public class UserService {
+package eu.filip.loginverification.service;
+
+public class UserService {
 }
