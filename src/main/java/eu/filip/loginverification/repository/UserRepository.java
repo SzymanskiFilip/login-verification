@@ -10,4 +10,12 @@ import java.util.Optional;
 public interface UserRepository extends CrudRepository<User, Long> {
     @Override
     Optional<User> findById(Long id);
+
+    @Override
+    boolean existsById(Long id);
+
+    @Override
+    User save(User user);
+
+    boolean existsByEmail(String email);
 }
