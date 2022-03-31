@@ -11,5 +11,6 @@ import java.util.UUID;
 public interface TokenRepository extends CrudRepository<Token, Long> {
     Optional<Token> findById(Long id);
 
-    Optional<Token> save(Token token);
+    @Override
+    <S extends Token> S save(S entity);
 }
