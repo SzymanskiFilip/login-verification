@@ -32,5 +32,9 @@ public class UserService {
         return user.getId();
     }
 
+    public void activateAccount(Long id){
+        userRepository.activateById(id);
+    }
+
 
 }
