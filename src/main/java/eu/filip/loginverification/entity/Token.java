@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -22,7 +24,7 @@ public class Token {
     private Long user_id;
 
     @Column(name = "expiration_date")
-    private Date expiration_date;
+    private LocalDateTime expiration_date;
 
     @Column(name = "activation_token")
     private UUID activation_token;
