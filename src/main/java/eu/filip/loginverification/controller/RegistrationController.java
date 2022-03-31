@@ -5,9 +5,7 @@ import eu.filip.loginverification.service.UserService;
 import eu.filip.loginverification.util.RegisterCredentials;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -24,5 +22,11 @@ public class RegistrationController {
         log.info(registerCredentials.toString());
         userService.registerUser(registerCredentials);
         tokenService.createToken(userService.getIdByEmail(registerCredentials.getEmail()));
+    }
+
+    @GetMapping("/activate/{token}")
+    public void activateAccount(@PathVariable String token){
+        log.info(token);
+        userService.activateAccount(2L);
     }
 }
