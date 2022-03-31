@@ -1,5 +1,6 @@
 package eu.filip.loginverification.controller;
 
+import eu.filip.loginverification.service.TokenService;
 import eu.filip.loginverification.service.UserService;
 import eu.filip.loginverification.util.RegisterCredentials;
 import lombok.AllArgsConstructor;
@@ -16,10 +17,12 @@ import javax.validation.Valid;
 public class RegistrationController {
 
     private final UserService userService;
+    private final TokenService tokenService;
 
     @PostMapping("/register")
     public void register(@RequestBody @Valid RegisterCredentials registerCredentials){
         log.info(registerCredentials.toString());
         userService.registerUser(registerCredentials);
+        tokenService.createToken(userService.getIdByEmail(registerCredentials.getEmail()));
     }
 }
