@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserService {
     private UserRepository userRepository;
-    private TokenService tokenService;
 
     public void registerUser(RegisterCredentials registerCredentials){
         log.info("EMAIL PASSED: " + registerCredentials.getEmail());
@@ -25,10 +24,12 @@ public class UserService {
             user.setActive(false);
 
             userRepository.save(user);
-
-            //creating random token
-
         }
+    }
+
+    public Long getIdByEmail(String email){
+        User user = userRepository.findByEmail(email);
+        return user.getId();
     }
 
 
