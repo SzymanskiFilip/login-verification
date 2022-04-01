@@ -35,4 +35,13 @@ public class TokenService {
         tokenRepository.save(token);
     }
 
+    public Token findByToken(UUID token){
+       try{
+           return tokenRepository.findByActivation_token(token);
+       } catch (IllegalArgumentException exception){
+           exception.printStackTrace();
+       }
+       return null;
+    }
+
 }

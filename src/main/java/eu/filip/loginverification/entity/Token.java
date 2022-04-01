@@ -26,6 +26,6 @@ public class Token {
     @Column(name = "expiration_date")
     private LocalDateTime expiration_date;
 
-    @Column(name = "activation_token")
+    @Column(name = "activation_token", updatable = false, nullable = false, unique = true, columnDefinition = "BINARY(16)")
     private UUID activation_token;
 }
