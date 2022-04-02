@@ -6,6 +6,7 @@ import eu.filip.loginverification.service.UserService;
 import eu.filip.loginverification.util.RegisterCredentials;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,8 +28,15 @@ public class RegistrationController {
     }
 
     @GetMapping("/activate/{token}")
-    public void activateAccount(@PathVariable String token){
+    public ResponseEntity<?> activateAccount(@PathVariable String token){
         Token tokenObject = tokenService.findByToken(UUID.fromString(token));
-        log.info(tokenObject.toString());
+        if(tokenObject == null){
+            return ResponseEntity.notFound().build();
+        } else{
+            log.info(tokenObject.toString());
+            userService.activateAccount(tokenObject.getUser_id());
+            return ResponseEntity.ok().build();
+        }
     }
+
 }

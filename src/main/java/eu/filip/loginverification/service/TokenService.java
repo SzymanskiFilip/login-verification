@@ -7,9 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -36,8 +33,12 @@ public class TokenService {
     }
 
     public Token findByToken(UUID token){
+       Token tokenObj;
        try{
-           return tokenRepository.findByActivation_token(token);
+           tokenObj = tokenRepository.findByActivation_token(token);
+           if(tokenObj != null){
+               return tokenObj;
+           }
        } catch (IllegalArgumentException exception){
            exception.printStackTrace();
        }
