@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -15,12 +16,18 @@ public class ActivationService {
     private TokenService tokenService;
     private UserService userService;
 
-    public void activate(UUID token){
+    public boolean activate(UUID token){
         //take token Object with the token passed from controller
         Token tokenObject = tokenService.findByToken(token);
         System.out.println(tokenObject.toString());
 
-        //if token is not expired
-        //set user with the id of the id of the token to activated
+
+        LocalDateTime now = LocalDateTime.now();
+        if(now.isBefore(tokenObject.getExpiration_date())){
+            System.out.println("TOKEN IS STILL VALID");
+            userService.activateAccount(tokenObject.getUser_id());
+            return true;
+        }
+        return false;
     }
 }
