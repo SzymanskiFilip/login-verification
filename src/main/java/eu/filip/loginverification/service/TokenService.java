@@ -16,7 +16,7 @@ import java.util.UUID;
 public class TokenService {
     private TokenRepository tokenRepository;
 
-    public void createToken(Long user_id){
+    public Token createToken(Long user_id){
         Token token = new Token();
         token.setUser_id(user_id);
 
@@ -30,19 +30,11 @@ public class TokenService {
         log.info(uuid.toString() + " " + date.toString());
 
         tokenRepository.save(token);
+        return token;
     }
 
     public Token findByToken(UUID token){
-       Token tokenObj;
-       try{
-           tokenObj = tokenRepository.findByActivation_token(token);
-           if(tokenObj != null){
-               return tokenObj;
-           }
-       } catch (IllegalArgumentException exception){
-           exception.printStackTrace();
-       }
-       return null;
+       return tokenRepository.findByActivation_token(token);
     }
 
 }

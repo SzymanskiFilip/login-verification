@@ -1,11 +1,15 @@
 package eu.filip.loginverification.controller;
 
 import eu.filip.loginverification.entity.Token;
+import eu.filip.loginverification.entity.User;
+import eu.filip.loginverification.service.ActivationService;
+import eu.filip.loginverification.service.MailService;
 import eu.filip.loginverification.service.TokenService;
 import eu.filip.loginverification.service.UserService;
 import eu.filip.loginverification.util.RegisterCredentials;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,24 +23,29 @@ public class RegistrationController {
 
     private final UserService userService;
     private final TokenService tokenService;
+    private final MailService mailService;
+    private final ActivationService activationService;
 
     @PostMapping("/register")
     public void register(@RequestBody @Valid RegisterCredentials registerCredentials){
         log.info(registerCredentials.toString());
         userService.registerUser(registerCredentials);
-        tokenService.createToken(userService.getIdByEmail(registerCredentials.getEmail()));
+        Token token = tokenService.createToken(userService.getIdByEmail(registerCredentials.getEmail()));
+        try{
+            mailService.sendMail(
+                    registerCredentials.getEmail(),
+                    "Verification",
+                    "http://localhost:8080/activate/" + token.getActivation_token()
+            );
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @GetMapping("/activate/{token}")
-    public ResponseEntity<?> activateAccount(@PathVariable String token){
-        Token tokenObject = tokenService.findByToken(UUID.fromString(token));
-        if(tokenObject == null){
-            return ResponseEntity.notFound().build();
-        } else{
-            log.info(tokenObject.toString());
-            userService.activateAccount(tokenObject.getUser_id());
-            return ResponseEntity.ok().build();
-        }
+    public void activateAccount(@PathVariable String token){
+        activationService.activate(UUID.fromString(token));
     }
 
 }

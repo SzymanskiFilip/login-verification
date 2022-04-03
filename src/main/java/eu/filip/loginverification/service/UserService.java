@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -34,6 +36,10 @@ public class UserService {
 
     public void activateAccount(Long id){
         userRepository.activateById(id);
+    }
+
+    public Optional<User> findById(Long id){
+        return userRepository.findById(id);
     }
 
 
