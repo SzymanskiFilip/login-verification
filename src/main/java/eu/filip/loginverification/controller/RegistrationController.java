@@ -37,7 +37,8 @@ public class RegistrationController {
                 mailService.sendMail(
                         registerCredentials.getEmail(),
                         "Verification",
-                        "http://localhost:8080/activate/" + token.getActivation_token()
+                        "Hello " + registerCredentials.getUsername() + " activate your account here: "
+                                + "http://localhost:8080/activate/" + token.getActivation_token()
                 );
             } catch (Exception e){
                 e.printStackTrace();
