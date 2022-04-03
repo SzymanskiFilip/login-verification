@@ -17,7 +17,7 @@ public class MailService {
     public void sendMail(String to, String subject, String body) throws MessagingException {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("szymanski.fp@gmail.com");
-        mailMessage.setTo("szymanski.fp@gmail.com");
+        mailMessage.setTo(to);
         mailMessage.setText(body);
         mailMessage.setSubject(subject);
 
