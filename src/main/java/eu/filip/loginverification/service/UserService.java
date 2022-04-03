@@ -15,18 +15,21 @@ import java.util.Optional;
 public class UserService {
     private UserRepository userRepository;
 
-    public void registerUser(RegisterCredentials registerCredentials){
+    public boolean registerUser(RegisterCredentials registerCredentials){
         log.info("EMAIL PASSED: " + registerCredentials.getEmail());
-        if(!userRepository.existsByEmail(registerCredentials.getEmail())){
-            log.info("DOESNT EXIST CREATING USER!");
-            User user = new User();
-            user.setUsername(registerCredentials.getUsername());
-            user.setPassword(registerCredentials.getPassword());
-            user.setEmail(registerCredentials.getEmail());
-            user.setActive(false);
 
-            userRepository.save(user);
+        if(userRepository.existsByEmail(registerCredentials.getEmail())){
+           return false;
         }
+
+        User user = new User();
+        user.setUsername(registerCredentials.getUsername());
+        user.setPassword(registerCredentials.getPassword());
+        user.setEmail(registerCredentials.getEmail());
+        user.setActive(false);
+
+        userRepository.save(user);
+        return true;
     }
 
     public Long getIdByEmail(String email){
