@@ -27,25 +27,34 @@ public class RegistrationController {
     private final ActivationService activationService;
 
     @PostMapping("/register")
-    public void register(@RequestBody @Valid RegisterCredentials registerCredentials){
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterCredentials registerCredentials){
         log.info(registerCredentials.toString());
-        userService.registerUser(registerCredentials);
-        Token token = tokenService.createToken(userService.getIdByEmail(registerCredentials.getEmail()));
-        try{
-            mailService.sendMail(
-                    registerCredentials.getEmail(),
-                    "Verification",
-                    "http://localhost:8080/activate/" + token.getActivation_token()
-            );
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        boolean created = userService.registerUser(registerCredentials);
 
+        if(created){
+            Token token = tokenService.createToken(userService.getIdByEmail(registerCredentials.getEmail()));
+            try{
+                mailService.sendMail(
+                        registerCredentials.getEmail(),
+                        "Verification",
+                        "http://localhost:8080/activate/" + token.getActivation_token()
+                );
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            return ResponseEntity.ok("account created");
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/activate/{token}")
-    public void activateAccount(@PathVariable String token){
-        activationService.activate(UUID.fromString(token));
+    public ResponseEntity<?> activateAccount(@PathVariable String token){
+        boolean activated = activationService.activate(UUID.fromString(token));
+
+        if(activated){
+            return ResponseEntity.ok("Activated");
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }
